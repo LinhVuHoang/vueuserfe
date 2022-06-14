@@ -20,10 +20,14 @@
                   <div class="card-body">
                     <div class="billing-address-form">
                       <form action="index.html">
-                        <p><input type="text" placeholder="Ship Name"></p>
-                        <p><input type="text" placeholder="Ship Address"></p>
-                        <p><input type="tel" placeholder="Ship Phone"></p>
-                        <p><textarea name="bill" id="bill" cols="30" rows="10" placeholder="Ship note"></textarea></p>
+                        <p><input type="text" v-model="ship.shipName" placeholder="Ship Name">
+                          <span id="error-shipname" style="color: red"></span></p>
+                        <p><input type="text" v-model="ship.shipAddress" placeholder="Ship Address">
+                          <span id="error-address" style="color: red"></span></p>
+                        <p><input type="tel"  v-model="ship.shipPhone" placeholder="Ship Phone">
+                          <span id="error-shipphone" style="color: red"></span></p>
+                        <p><textarea name="bill" id="bill" cols="30" rows="10" v-model="ship.shipNote" placeholder="Ship note"></textarea>
+                          <span id="error-shipnote" style="color: red"></span></p>
                       </form>
                     </div>
                   </div>
@@ -98,7 +102,7 @@
               </tr>
               </tbody>
             </table>
-            <a href="#" class="boxed-btn">Place Order</a>
+            <a href="#" @click.stop.prevent="handleSubmit" class="boxed-btn">Place Order</a>
           </div>
         </div>
       </div>
@@ -126,7 +130,7 @@ export default {
         quantity: undefined
       },
       ship:{
-          shipName:undefined,
+        shipName:undefined,
         shipAddress:undefined,
         shipPhone:undefined,
         shipNote:undefined
@@ -143,11 +147,68 @@ export default {
         console.log(this.cartData)
       })
     },
-    getOrder(){
-      OrderService.getOrders().then(rs=>{
-        this.orderdata = rs.data.data
-      })
+    validPhonenumber(str){
+      var pattern = new RegExp('^\\(?([0-9]{3})\\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$');
+      return !!pattern.test(str);
+    },
+    validate(){
+      var errorName = document.getElementById('error-shipname')
+      var errorAddress = document.getElementById('error-address')
+      var errorshipphone = document.getElementById('error-shipphone')
+      let checkNumber =0;
+      if(this.ship.shipName === undefined){
+        errorName.innerText = 'Vui lòng nhập tên'
+        checkNumber++;
+      }else if(this.ship.shipName.length<7 ||this.ship.shipName.length >25){
+        errorName.innerText = 'Tên chỉ được trong khoảng từ 7 đến 25 ký tự'
+        checkNumber++;
+      }
+      else {
+        errorName.innerText = ''
+      }
+      if (this.ship.shipAddress == undefined) {
+        errorAddress.innerText = 'Vui lòng nhập địa chỉ'
+        checkNumber++;
+      }else if(this.ship.shipAddress.length<5){
+        errorAddress.innerText = 'Địa chỉ phải lớn hơn 5 ký tự'
+        checkNumber++;
+      }else {
+        errorAddress.innerText=''
+      }
+      if(this.ship.shipPhone === undefined){
+        errorshipphone.innerText = 'Vui lòng nhập số điện thoại'
+        checkNumber++;
+      }else if(this.ship.shipPhone.length<10 || this.ship.shipPhone.length>11 ){
+        errorshipphone.innerText = 'Số điện thoại phải trong 10 đến 11 ký tự'
+        checkNumber++;
+      }else  if(!this.validPhonenumber(this.ship.shipPhone))
+      {
+        errorshipphone.innerText = 'Số điện thoại phải là số'
+        checkNumber++;
+      } else {
+        errorshipphone.innerText=''
+      }
+      if (checkNumber == 0) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    },
+    handleSubmit(e){
+      e.preventDefault()
+      if(!this.validate()){
+        console.log("Lỗi ở đây")
+      }else {
+        OrderService.submitOrder(this.ship).then(
+            alert("Đặt hàng thành công")
+        ).catch(error => {
+          console.log(error)
+        })
+      }
+
     }
+
   }
 }
 </script>

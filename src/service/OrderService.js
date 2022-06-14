@@ -19,7 +19,7 @@ class OrderService {
             ,orderDto
         );
     }
-    getOrders(body){
+    submitOrder(body){
         return http.post(URL_CATEGORIES + "/proceedOrder1",body
         );
     }
