@@ -8,6 +8,8 @@ import {CheckOut} from "../pages/CheckOut";
 import {About} from "../pages/About";
 import {Contact} from "../pages/Contact";
 import {Logins} from "@/pages/Login";
+import {Profile} from "@/pages/Profile";
+import {EditProfile} from "@/pages/EditProfile";
 
 Vue.use(VueRouter)
 
@@ -19,7 +21,10 @@ const routes = [
     ...CheckOut,
     ...About,
     ...Contact,
-    ...Logins
+    ...Logins,
+    ...Profile,
+    ...EditProfile
+
 ]
 
 const router = new VueRouter({

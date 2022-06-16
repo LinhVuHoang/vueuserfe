@@ -206,7 +206,7 @@ export default {
           console.log(error)
         })
       }
-
+      window.location.reload()
     }
 
   }
