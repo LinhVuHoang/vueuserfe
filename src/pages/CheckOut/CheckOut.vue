@@ -90,15 +90,19 @@
               <tbody class="checkout-details">
               <tr>
                 <td>Subtotal</td>
-                <td>{{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(this.cartData.totalPrice) }}</td>
+                <td v-if="this.cartData.totalPrice == undefined">{{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(0) }}</td>
+                <td v-else>{{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(this.cartData.totalPrice) }}</td>
               </tr>
               <tr>
                 <td>Shipping</td>
-                <td>{{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(50000) }}</td>
+                <td v-if="this.cartData.totalPrice > 500000">{{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(0) }}</td>
+                <td v-else>{{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(50000) }}</td>
               </tr>
               <tr>
                 <td>Total</td>
-                <td>{{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(this.cartData.totalPrice+50000) }}</td>
+                <td v-if="this.cartData.totalPrice == undefined ||this.cartData.totalPrice ==0">{{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(0) }}</td>
+                <td v-else-if="this.cartData.totalPrice > 500000">{{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(this.cartData.totalPrice + 0)}}</td>
+                <td v-else>{{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(this.cartData.totalPrice + 50000)}}</td>
               </tr>
               </tbody>
             </table>
@@ -201,12 +205,12 @@ export default {
         console.log("Lỗi ở đây")
       }else {
         OrderService.submitOrder(this.ship).then(
-            alert("Đặt hàng thành công")
+            alert("Đặt hàng thành công"),
+        this.$router.push('/cart')
         ).catch(error => {
           console.log(error)
         })
       }
-      window.location.reload()
     }
 
   }

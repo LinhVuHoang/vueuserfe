@@ -3,10 +3,10 @@ import Detail from "./Detail";
 
 const routes = [
     {
-        path: '/detail',
+        path: '/:id',
         component: Detail,
-        title: 'Detail',
-        name: 'Detail'
+        title: 'DetailProduct',
+        name: 'DetailProduct'
 
     },
 ]

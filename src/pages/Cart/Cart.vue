@@ -19,14 +19,14 @@
                 </thead>
                 <tbody v-for="od in cartData.orderDetails" :key="od.id">
                 <tr class="table-body-row">
-                <td class="product-remove"><a @click="confirmRemove(od.id.productId)"><i class="far fa-window-close"></i></a></td>
+                  <td class="product-remove"><a @click="confirmRemove(od.id.productId)"><i class="far fa-window-close"></i></a></td>
                   <td class="product-image"><img :src="od.thumbnailProduct" alt=""></td>
                   <td style="width: 125px" class="product-name">{{ od.productName }}</td>
                   <td class="product-price">{{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(od.unitPrice) }}</td>
                   <td class="product-quantity">
-<!--                    <button @click="decreaseProductQuantity(od.id.productId)" ><i class="fa fa-minus"></i></button>-->
+                    <!--                    <button @click="decreaseProductQuantity(od.id.productId)" ><i class="fa fa-minus"></i></button>-->
                     <input type="number" min="1" disabled class="quantity" :value="od.quantity" />
-<!--                    <button @click="increaseProductQuantity(od.id.productId)" ><i class="fa fa-plus"></i></button>-->
+                    <!--                    <button @click="increaseProductQuantity(od.id.productId)" ><i class="fa fa-plus"></i></button>-->
                   </td>
                   <td class="product-total">{{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(od.unitPrice * od.quantity) }}</td>
                 </tr>
@@ -47,7 +47,8 @@
                 <tbody>
                 <tr class="total-data">
                   <td><strong>Subtotal: </strong></td>
-                  <td>{{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(this.cartData.totalPrice) }}</td>
+                  <td v-if="this.cartData.totalPrice == undefined">{{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(0) }}</td>
+                  <td v-else>{{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(this.cartData.totalPrice) }}</td>
                 </tr>
                 <tr class="total-data">
                   <td><strong>Shipping: </strong></td>
@@ -56,26 +57,27 @@
                 </tr>
                 <tr class="total-data">
                   <td><strong>Total: </strong></td>
-                  <td v-if="this.cartData.totalPrice > 500000">{{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(this.cartData.totalPrice + 0)}}</td>
+                  <td v-if="this.cartData.totalPrice == undefined ||this.cartData.totalPrice ==0">{{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(0) }}</td>
+                  <td v-else-if="this.cartData.totalPrice > 500000">{{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(this.cartData.totalPrice + 0)}}</td>
                   <td v-else>{{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(this.cartData.totalPrice + 50000)}}</td>
                 </tr>
                 </tbody>
               </table>
               <div class="cart-buttons">
-<!--                <a href="cart.html" class="boxed-btn">Update Cart</a>-->
-                <a href="/checkout" class="boxed-btn black">Check Out</a>
+                <!--                <a href="cart.html" class="boxed-btn">Update Cart</a>-->
+                <a v-if="this.cartData.totalPrice >0" href="/checkout" class="boxed-btn black">Check Out</a>
               </div>
             </div>
 
-<!--            <div class="coupon-section">-->
-<!--              <h3>Apply Coupon</h3>-->
-<!--              <div class="coupon-form-wrap">-->
-<!--                <form action="index.html">-->
-<!--                  <p><input type="text" placeholder="Coupon"></p>-->
-<!--                  <p><input type="submit" value="Apply"></p>-->
-<!--                </form>-->
-<!--              </div>-->
-<!--            </div>-->
+            <!--            <div class="coupon-section">-->
+            <!--              <h3>Apply Coupon</h3>-->
+            <!--              <div class="coupon-form-wrap">-->
+            <!--                <form action="index.html">-->
+            <!--                  <p><input type="text" placeholder="Coupon"></p>-->
+            <!--                  <p><input type="submit" value="Apply"></p>-->
+            <!--                </form>-->
+            <!--              </div>-->
+            <!--            </div>-->
           </div>
         </div>
       </div>
@@ -94,7 +96,7 @@ export default {
     return{
       cartData:[],
       cartItem:[],
-        productId: undefined,
+      productId: undefined,
       productQuantity:{
         productId: undefined,
         isIncrease: undefined
@@ -133,11 +135,11 @@ export default {
     },
     decreaseProductQuantity(id){
       this.productQuantity.productId = id;
-        this.productQuantity.isIncrease=0;
-     /*   if(this.productQuantity.quantity <0){
-          this.productQuantity.quantity =0;
-        }*/
-        OrderService.getvalue(this.productQuantity)
+      this.productQuantity.isIncrease=0;
+      /*   if(this.productQuantity.quantity <0){
+           this.productQuantity.quantity =0;
+         }*/
+      OrderService.getvalue(this.productQuantity)
       this.getCartData()
 
     }

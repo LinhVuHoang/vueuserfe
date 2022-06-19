@@ -8,6 +8,9 @@ class CategoryService {
         return http.get(URL_CATEGORIES + "/list", {
         });
     }
+    detail(id){
+        return http.get(URL_CATEGORIES + "/detail/"+ id)
+    }
 
 }
 
