@@ -17,7 +17,7 @@
                 </tr>
                 </thead>
                 <tbody v-for="order in data" v-bind:key="order.id" style="background: whitesmoke">
-                <tr v-if="order.shoppingCart ==false && order.checkout ==true">
+                <tr v-if="order.shoppingCart ==false">
                   <td >
                     {{ order.createdAt.split("-")[2] }}-{{ order.createdAt.split("-")[1] }}-{{ order.createdAt.split("-")[0] }}
                   </td>
@@ -30,9 +30,10 @@
                         Đang xử lý
                       </span></td>
                   <td>
-                    <span  style="color: green">
+                    <span v-if="order.checkout==true"  style="color: green">
                     Đã thanh toán
-                    </span></td>
+                    </span>
+                  <span v-else style="color: blue">Chưa thanh toán</span></td>
                   <td>{{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(order.totalPrice)}}
                   </td>
                   <td ><a class="button" :href="'detail/'+ order.id " style="text-decoration: none">
