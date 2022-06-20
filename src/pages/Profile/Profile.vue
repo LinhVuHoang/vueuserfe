@@ -1,11 +1,12 @@
 <template>
+  <section class="custom-de">
   <div class="container">
     <div class="main-body">
 
       <!-- Breadcrumb -->
       <nav aria-label="breadcrumb" class="main-breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="/">Home</a></li>
           <li class="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
           <li class="breadcrumb-item active" aria-current="page">User Profile</li>
         </ol>
@@ -19,7 +20,7 @@
               <div class="d-flex flex-column align-items-center text-center">
                 <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
                 <div class="mt-3">
-                  <h4>John Doe</h4>
+                  <h4>{{this.acc.name}}</h4>
                 </div>
               </div>
             </div>
@@ -33,7 +34,7 @@
                   <h6 class="mb-0">Full Name</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
-                  Kenneth Valdez
+                  {{this.acc.name}}
                 </div>
               </div>
               <hr>
@@ -42,25 +43,17 @@
                   <h6 class="mb-0">Phone</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
-                  (239) 816-9029
+                  {{this.acc.phone}}
                 </div>
               </div>
               <hr>
-              <div class="row">
-                <div class="col-sm-3">
-                  <h6 class="mb-0">Mobile</h6>
-                </div>
-                <div class="col-sm-9 text-secondary">
-                  (320) 380-4539
-                </div>
-              </div>
               <hr>
               <div class="row">
                 <div class="col-sm-3">
                   <h6 class="mb-0">Address</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
-                  Bay Area, San Francisco, CA
+                  {{this.acc.address}}
                 </div>
               </div>
               <hr>
@@ -76,15 +69,60 @@
 
     </div>
   </div>
+  </section>
 </template>
 
 <script>
+import OrderService from "@/service/OrderService";
+
 export default {
-  name: "Profile"
+  name: "Profile",
+  data(){
+    return{
+      token : localStorage.getItem('access_token'),
+      mostrarMenu: false,
+      data3: [],
+      params: {
+        pageSize: 100,
+        page: 1,
+        from: "",
+        to: "",
+        status: undefined,
+        accountName: undefined,
+        phoneAccount: undefined,
+        id: undefined
+      },
+      totalRecords: undefined,
+      acc:[],
+    }
+  },
+  created() {
+    this.getAccount()
+  },
+  methods:{
+    async getAccount() {
+      await OrderService.getAllAcount(this.params).then(rs => {
+        this.data3 = rs.data.data;
+        this.totalRecords = rs.data.pagination.totalItems;
+      })
+      let jwt = this.token;
+      let jwtData = jwt.split('.')[1]
+      let decodedJwtJsonData = window.atob(jwtData)
+      let decodedJwtData = JSON.parse(decodedJwtJsonData)
+      for(let i=0;i<this.data3.length;i++){
+        if(this.data3[i].username == decodedJwtData.sub) {
+          this.acc = this.data3[i]
+        }
+      }
+    },
+  }
 }
 </script>
 
 <style scoped>
+.custom-de{
+  padding-top: 300px;
+}
 body{
   margin-top:20px;
   color: #1a202c;

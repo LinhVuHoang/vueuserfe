@@ -3,7 +3,7 @@ import Detail from "./Detail";
 
 const routes = [
     {
-        path: '/:id',
+        path: '/detail:id',
         component: Detail,
         title: 'DetailProduct',
         name: 'DetailProduct'

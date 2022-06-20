@@ -10,6 +10,7 @@ import {Contact} from "../pages/Contact";
 import {Logins} from "@/pages/Login";
 import {Profile} from "@/pages/Profile";
 import {EditProfile} from "@/pages/EditProfile";
+import {CartHistory} from "@/pages/CartHistory";
 
 Vue.use(VueRouter)
 
@@ -23,7 +24,8 @@ const routes = [
     ...Contact,
     ...Logins,
     ...Profile,
-    ...EditProfile
+    ...EditProfile,
+    ...CartHistory
 
 ]
 

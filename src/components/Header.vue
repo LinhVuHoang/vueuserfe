@@ -34,31 +34,31 @@
 <!--                    <li><a href="index_2.html">Slider Home</a></li>-->
 <!--                  </ul>-->
                 </li>
-                <li><a href="about.html">About</a></li>
+                <li><a href="about">About</a></li>
                 <li><a href="#">Pages</a>
                   <ul class="sub-menu">
-                    <li><a href="404.html">404 page</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="cart.html">Cart</a></li>
-                    <li><a href="checkout.html">Check Out</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                    <li><a href="news.html">News</a></li>
-                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="404">404 page</a></li>
+                    <li><a href="about">About</a></li>
+                    <li><a href="cart">Cart</a></li>
+                    <li><a href="checkout">Check Out</a></li>
+                    <li><a href="contact">Contact</a></li>
+                    <li><a href="news">News</a></li>
+                    <li><a href="shop">Shop</a></li>
                   </ul>
                 </li>
-                <li><a href="news.html">News</a>
+                <li><a href="news">News</a>
                   <ul class="sub-menu">
-                    <li><a href="news.html">News</a></li>
-                    <li><a href="single-news.html">Single News</a></li>
+                    <li><a href="news">News</a></li>
+                    <li><a href="single-news">Single News</a></li>
                   </ul>
                 </li>
-                <li><a href="contact.html">Contact</a></li>
+                <li><a href="contact">Contact</a></li>
                 <li><a href="/shop">Shop</a>
                   <ul class="sub-menu">
-                    <li><a href="shop.html">Shop</a></li>
-                    <li><a href="checkout.html">Check Out</a></li>
-                    <li><a href="single-product.html">Single Product</a></li>
-                    <li><a href="cart.html">Cart</a></li>
+                    <li><a href="shop">Shop</a></li>
+                    <li><a href="checkout">Check Out</a></li>
+                    <li><a href="single-product">Single Product</a></li>
+                    <li><a href="cart">Cart</a></li>
                   </ul>
                 </li>
                 <li>
@@ -73,7 +73,7 @@
                     >
                       <img
                           class="mini-photo"
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuRnrvqZ0kAnwaXoj5ecnBn9HbcH7SwLkCFCynRnhkFm80_naG"
+                          src="https://bootdey.com/img/Content/avatar/avatar7.png"
                           width="36"
                           height="36"/></a>
                     <div
@@ -81,8 +81,8 @@
                         class="menu-container"
                         :class="{ active : mostrarMenu  }">
                       <ul class="user-menu">
-                        <li class="user-menu__item" style="float:left;"><a class="user-menu-link" href="#">Profile</a></li>
-                        <li class="user-menu__item" style="float:left;"><a class="user-menu-link" href="#">History</a></li>
+                        <li class="user-menu__item" style="float:left;"><a class="user-menu-link" href="/profile">Profile</a></li>
+                        <li class="user-menu__item" style="float:left;"><a class="user-menu-link" :href="'/history'+accname">History</a></li>
                         <li class="user-menu__item" style="float: left;" ><a class="user-menu-link" href="/login">Logout</a></li>
                       </ul>
                     </div>
@@ -187,18 +187,51 @@
 </template>
 
 <script type="text/babel">
+import OrderService from "@/service/OrderService";
+
 export default {
   name: "Header",
   data(){
     return{
       token : localStorage.getItem('access_token'),
       mostrarMenu: false,
+      data3: [],
+      params: {
+        pageSize: 100,
+        page: 1,
+        from: "",
+        to: "",
+        status: undefined,
+        accountName: undefined,
+        phoneAccount: undefined,
+        id: undefined
+      },
+      totalRecords: undefined,
+      accname:"",
     }
+  },
+  created() {
+    this.getAccount()
   },
   methods:{
     abrirMenu(){
       this.mostrarMenu ? this.mostrarMenu = false : this.mostrarMenu = true
-    }
+    },
+    async getAccount() {
+      await OrderService.getAllAcount(this.params).then(rs => {
+        this.data3 = rs.data.data;
+        this.totalRecords = rs.data.pagination.totalItems;
+      })
+      let jwt = this.token;
+      let jwtData = jwt.split('.')[1]
+      let decodedJwtJsonData = window.atob(jwtData)
+      let decodedJwtData = JSON.parse(decodedJwtJsonData)
+      for(let i=0;i<this.data3.length;i++){
+        if(this.data3[i].username == decodedJwtData.sub) {
+          this.accname = this.data3[i].name
+        }
+      }
+    },
   }
 }
 </script>

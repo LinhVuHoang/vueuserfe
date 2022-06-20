@@ -26,6 +26,16 @@ class OrderService {
     getvalue(body){
         return http.post(URL_CATEGORIES+"/controlvalue1",body);
     }
+    getAllOrder(params){
+        return http.get(URL_CATEGORIES + "/list", {
+            params: params,
+        });
+    }
+    getAllAcount(params){
+        return http.get("http://localhost:8888/api/v1/accounts/list",{
+            params,
+        });
+    }
 
 }
 

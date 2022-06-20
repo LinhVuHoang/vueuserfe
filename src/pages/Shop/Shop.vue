@@ -20,7 +20,7 @@
             <div class="col-lg-4 col-md-6 text-center strawberry" v-bind:key="product.id">
               <div class="single-product-item">
                 <div class="product-image">
-                  <a  class="button" :href="'/'+product.id"><img :src="product.thumbnail" alt=""></a>
+                  <a  class="button" :href="'/detail'+product.id"><img :src="product.thumbnail" alt=""></a>
                 </div>
 
                 <h3>{{ product.name }}</h3>
