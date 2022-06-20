@@ -206,7 +206,7 @@ export default {
       }else {
         OrderService.submitOrder(this.ship).then(
             alert("Đặt hàng thành công"),
-        this.$router.push('/cart')
+        this.$router.push('/shop')
         ).catch(error => {
           console.log(error)
         })
