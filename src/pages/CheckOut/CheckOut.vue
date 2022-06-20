@@ -182,12 +182,12 @@ export default {
       if(this.ship.shipPhone === undefined){
         errorshipphone.innerText = 'Vui lòng nhập số điện thoại'
         checkNumber++;
-      }else if(this.ship.shipPhone.length<10 || this.ship.shipPhone.length>11 ){
-        errorshipphone.innerText = 'Số điện thoại phải trong 10 đến 11 ký tự'
+      }else if(this.ship.shipPhone.length<10 || this.ship.shipPhone.length>10 ){
+        errorshipphone.innerText = 'Số điện thoại phải là 10 ký tự'
         checkNumber++;
-      }else  if(!this.validPhonenumber(this.ship.shipPhone))
+      }else if(!this.validPhonenumber(this.ship.shipPhone))
       {
-        errorshipphone.innerText = 'Số điện thoại phải là số'
+        errorshipphone.innerText = 'Số điện thoại không chứa ký tự'
         checkNumber++;
       } else {
         errorshipphone.innerText=''
